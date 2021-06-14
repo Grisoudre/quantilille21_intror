@@ -1,0 +1,1909 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Introduction à R/RStudio et au {tidyverse}</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Cécile Rodrigues - CNRS / CERAPS" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
+    <link href="libs/panelset-0.2.4/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset-0.2.4/panelset.js"></script>
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Introduction à R/RStudio et au {tidyverse}
+## Ecole d’été en méthodes quantitatives pour les sciences sociales Quantilille 2021
+### Cécile Rodrigues - CNRS / CERAPS
+### Dernière modification : 14/06/2021
+
+---
+
+
+
+
+
+
+
+## Avant de commencer...
+
+-&gt; Vérification des installations et problèmes préalables éventuels
+
+--
+
+-&gt; Exprimez vos difficultés et incompréhensions pour éviter quelles s'accumulent
+
+--
+
+-&gt; Jouez le jeu des exercices : c'est un moyen pour se familiariser avec l'écriture de R
+
+--
+
+-&gt; **Document support à télécharger :** Lien dans la conversation (attention, le lien est actif une semaine)
+
+Le support vous aide à suivre la formation, vous pouvez directement copier/coller les codes proposés. Tous les fichiers contenus dans l'archive .zip doivent être extraits dans un dossier. Le fichier .html contient l'ensemble de la présentation et s'ouvre via un nagivateur web (firefox, chrome, opera, etc).
+
+--
+
+-&gt; **Framapad pour partager votre code R pour les exercices :** https://hebdo.framapad.org/p/datashs_pudl_r-9kja (attention, le lien est actif une semaine)
+
+
+---
+
+## Mise en place de la session de travail
+
+
+-&gt; Dès maintenant, créez un dossier consacré à la formation, par exemple appelé "Quantilille 21 - intro R" :
+
+--
+  - Dans ce dossier, on anticipe l'accmulation de fichiers en créant les sous-dossiers suivants : data (données en input), script (codes et instructions en R) et output (tableaux de résultats ou graphiques en export).
+  
+--
+  - Dans le sous-dossier data, copiez les tables de données téléchargées
+
+--
+
+### Programme de la demi-journée (3h)
+
+1. Présentation de R/Rstudio, de l'environnement de travail et du {tidyverse}
+2. Importation des données
+3. Exploration des données
+4. Mise en forme et modification des données
+
+
+---
+## Données utilisées
+
+Nous allons travailler sur des données portant sur les accidents de la route 2019 décrits par les forces de police : 
+https://www.data.gouv.fr/fr/datasets/base-de-donnees-accidents-corporels-de-la-circulation/
+
+En général, voici le type de fichiers qu'on reçoit lorsqu'on contacte les producteurs d'une enquête :
+
+- Fichier de données brutes -&gt; ici, les 4 fichiers .csv
+- Dictionnaire des codes -&gt; le fichier .pdf
+- Questionnaire -&gt; pas de questionnaire dans ce cas
+- Documentation méthodologique -&gt; le fichier .pdf
+
+**Identifiants :**
+
+Permettant de joindre les tables
+
++ **Num_Acc** : Identifiant **unique** de l'accident
++ **Num_veh** : Identifiant (non unique) véhicule, un accident peut concerner plusieurs véhicules
++ **id_vehicule** : Ajout de 2019, identifiant **unique** du véhicule
+
+---
+## Comment appréhender des tables de données ?
+
+
++ **"Logiciels clic-boutons"** : Excel, Excel Stat... et à un autre niveau SPAD, SPSS, Sphinx, ModaLisa. 
+
+Interface avec menus et options évitant de passer par des lignes de commande. Facilité d'accès mais tâches répétitives et non enregistrées. Pas d'historique des actions effectuées. Problème de la reproductibilité et de la transférabilité des documents produits.
+
++ **Langages de programmation** : essentiellement Python, SAS, R, SPSS...
+
+Chaque action est produite par une ligne de commande exécutée dans un IDE (environnement de développement intégré). Historique et reproductibilité garantis, plus de possibilités.
+
+---
+&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;
+&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;
+&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;
+
+&lt;h1 align="right"&gt;&lt;font color="#5C5C5C"&gt;1. Présentation de R/Rstudio, de l'environnement de travail et du {tidyverse}&lt;/font&gt;&lt;/h1&gt;
+
+ 
+
+---
+## R
+
+**= Langage "Brut"**
+
+R est un dérivé gratuit (licence GNU GPL) du langage de statistique S. C'est un projet collaboratif et donc ouvert à tous. Il est entretenu par le R Development Core Team (CRAN). C'est un **langage** permettant de produire des statistiques descriptives comme des statistiques avancées. Ses fonctionnalités sont étendues ; il offre un large choix d'options graphiques. Il permet de développer ses propres fonctions et d'utiliser des fonctions développées par d'autres chercheurs, ingénieurs ou développeurs.
+
++ **Gratuit** et **opensource**
++ **Multi-plateformes** (Windows, Linux, OS X)
++ Produit **simplement** des statistiques avancées :
+    + Statistiques descriptives, inférentielles
+    + Représentations graphiques
+    + Analyses factorielles
+    + Modélisations
+    + Analyses de réseaux
+    + Cartographies, etc.
++ Grâce aux **"packages"** (extensions, bibliothèques de fonctions), les fonctionnalités sont très étendues et en font un langage complet
+
+---
+
+## R
+
+
++ Importante **communauté** :
+    + Tutoriels et aides sur le web
+    + Développement constant de nouvelles fonctionnalités, interfaces et mises à jour régulières
++ **Reproductibilité** et **historique** : 
+    + **Partager** simplement des **rapports commentés** (pdf, word, htlm, présentations) et **applications en ligne** ;
+    + **Reproduire** et adapter des procédures et méthodes réalisées pour d'autres projets (ex : Rapports annuels);
++ Permet de ne pas subir des options par défaut sans les comprendre
++ **Compatible** avec d'autres langages, **exportations graphiques** avancées
+
+***... Quelques inconvénients :***
+
++ Les fonctionnalités (et bibliothèques) sont très souvent mises à jour et nécessitent d'être maintenues.
++ Les fonctionnalités sont créées par les contributeurs et les syntaxes peuvent varier
+
+
+---
+## RStudio
+
+**= Interface de développement**
+
+La console diponible avec R est très rudimentaire (On utilise R dans le terminal sur linux), peu conviviable et devient complexe lorsque vous avez plusieurs fichiers et projets à gérer. 
+
+Il est conseillé d'utiliser un logiciel offrant un espace de travail plus agréable et complet. **RStudio** est un environnement de développement pour l'écriture et la visualisation de scripts R. :
+
+- Il est également **gratuit**
+- Il offre un **éditeur de texte** (coloration donnant des repères, auto complétion, indentation)
+- Permet un affichage **simultané** des scripts, sorties, fichiers, graphiques, aides
+- Intègre une série de **modules** supplémentaires (Addins)
+- Les fonctionnalités de **projets** facilitent l'accès aux dossiers (association entre la session de travail et les dossiers-cibles) et de façon plus avancée, la création d'applications et de rapports
+
+---
+
+## Téléchargements R/RStudio
+
+**- (1) Téléchargement du langage R :**
+
+https://cran.r-project.org/
+
+puis "Downolad for..." en fonction du système d'exploitation ; faire bien attention à télécharger la version compatible avec la version de votre système d'exploitation (surtout sur mac, vérifier la compatibilité indiquée dans la colonne "latest release") 
+
+**- (2) Télécharger et installer l'IDE RStudio :**
+
+**RStudio** : https://www.rstudio.com/products/rstudio/download/#download : idem, faire attention à prendre la version correspondant au système d'exploitation
+
+
+
+---
+## Les packages
+
+**= Bibliothèques de fonctions, env. extensions**
+
+
+- **Packages** : Extensions ajoutées à votre session de travail, une fois installées et chargées. Les packages sont des **bibliothèques de fonctions** supplémentaires développées par d'autres personnes.
+
+- Les packages "officiels" sont validés par la communauté de R (CRAN). Ils sont tous **accompagnés d'une documentation** (document pdf issu du site cran.r-project.org).
+
+---
+## Les packages
+
+  - *1. L'installer* **(une seule fois, vous l'avez déjà fait avant la formation)**
+  
+
+##### Pour installer un package validé par le CRAN :
+
+
+```r
+install.packages("tidyverse", dep=T)
+```
+
+
+##### Pour utiliser un package développé qui n'est pas sur le serveur du CRAN :
+
+
+```r
+remotes::install_github("NomUtilisateur/NomPackage")
+```
+
+concrètement, on fait appelle au packages {remotes} en écrivant le nom du packages puis "::" pour désigner qu'on utilise une fonction de ce packages -&gt; intérêt : évite de charger les fonctions quand on en utilisera qu'une une seule fois.
+
+
+*Cette étape d'installation des packages est délicate : R évoluant rapidement, la compatibilité entre les packages et entre les packages et la version utilisée de R n'est toujours maintenue.*
+
+---
+## Les packages
+
+  - **2. Le charger** **(à refaire pour chaque session)**.
+      - En ligne de commande :
+
+```r
+library(tidyverse)
+library(questionr)
+```
+
+
+**/!\\ Il est préférable d'écrire ces lignes afin que les packages soient automatiquement définis et que les fonctions associées fonctionnent.**
+
+**On recommande aussi de mettre ces lignes en début de script.**
+
+*library() est équivalent à require()* que vous rencontrerez peut-être.
+
+
+&lt;img src="img/install_vs_library.jpeg" width="450px" style="display: block; margin: auto;" /&gt;
+
+
+---
+## {tidyverse}
+
+
+Une des limites du langage R est aussi une de ses qualités : la possibilité de créer et de diffuser des fonctions et des packages facilement implique que, selon les packages utilisés, la syntaxe peut varier.
+
+Le package {tidyverse} regroupe d'autres packages complémentaires qui ont été pensés selon une syntaxe commune et qui commence à être largement partagées. C'est pourquoi, pour cette demi-journée, je vous présenterai essentiellement des fonctionnalités {tidyverse} au détriment du code en R {base}. Nous nous y intéressons particulièrement pour ses fonctionnalités de mise en forme des données. Les principaux "sous-packages" de {tidyverse} sont :
+
+- `readr` : importation
+- `tibble` : format des tableaux de données
+- `forcats` : mise en forme des facteurs
+- `stringr` : modification de chaînes de caractères
+- `tidyr` et `dplyr` : mise en forme de tableaux
+- `ggplot2` : graphiques
+
+---
+
+## Environnement de RStudio
+
+On ouvre RStudio pour découvrir l'interface, puis on créera un projet associé aux dossiers et sous-dossiers qu'on vient de faire.
+
+
+&lt;img src="img/environnementRStudio2.png" width="650px" /&gt;
+
+---
+
+- **Console** : Retour direct des instructions (**sans sauvegarde**). La console permet de vérifier que les lignes de commande ont bien été exécutées et de comprendre les erreurs éventuelles afin de les corriger.
+**"&gt;" = prêt à recevoir des instructions.**
+
+Instruction simple :
+
+```r
+1+1
+```
+Et touche Entrée
+
+- **Script** : Zone d'écriture des instructions qui constitue le programme ou script qui sera **gardé en mémoire** (après sauvegarde)
+Pour ouvrir un script : ctrl+shift+N / Fichier &gt; new file &gt; R script
+
+```r
+1+1
+```
+Sélectionner la ligne puis Ctrl + entrée ou bouton "Run". 
+Ou "Source" pour tout exécuter
+
+---
+
+### Créer un objet dans R
+
+Dans R, on manipule des **objets** qu'on crée directement dans l'interface. En fait, ce sont des objets virtuels qui n'existent que dans la session de travail.
+Pour créer un objet, on lui donne un nom, puis on écrit **&lt;-** afin de signaler qu'on va définir un contenu à cet objet, enfin on définit son contenu :
+
+
+
+```r
+# Création d'une valeur
+Objet &lt;- 5
+Objet &lt;- Objet + 2
+Objet + Objet
+class(Objet)
+# Création d'une chaîne de caractères
+Texte &lt;- "Mon texte"
+Texte
+# texte
+class(Texte)
+# Supprimer des objets :
+rm(Texte, Objet)
+```
+
+**Attention :**
+
+- Respect de la casse
+- Ni accent, ni espace, ni caractère spécial en-dehors de "_"
+
+
+Les objets peuvent être de différentes natures : chaîne de caractère, chiffre, suite d'éléments (vecteur), tableau, matrice, image, graphique, etc. Ils sont toujours accessible par déclaration et créés/édités avec "&lt;-"
+
+---
+## Utiliser des fonctions dans R
+
+R est un langage orienté vers les objets qui sont au centre des manipulations produites. Les actions sont réalisées à l'aide de **fonctions** qui agissent sur des **objets**. Les fonctions sont déclarées par leurs noms et suivies de parenthèses : **fonction()**. A l'intérieur des fonctions, on déclare un ou plusieurs **arguments** : les **objets** et des **options**.
+
+
+```r
+A &lt;- 14.5646
+round(A, digits = 2)
+```
+
+```
+## [1] 14.56
+```
+où **round** est la fonction "arrondir", **A** l'objet à imprimer, **digits = ** l'option "2 décimales".
+
+Par défaut, notations anglosaxonnes (. ou décimales)
+
+---
+
+- **Objets** : Liste des objets créés (tableaux avec variables, listes, etc.)
+
+- **Historique**
+
+- **Fichiers** : Dossiers et fichiers
+
+- **Graphiques** : Zoom, export
+
+- **Aide** : Obtenir plus d'information sur une fonction, par exemple la fonction table() :
+
+```r
+?print
+```
+
+- **Menus** :
+    - **Fichiers** : Nouveau fichier (script, présentation), ouvrir fichier, enregistrer, fichiers récents
+    - **Outils** : Installer package (gmodels), options
+    - **Session** : Actions sur la session de travail
+
+
+**Enregistrer votre script : File &gt; Save as...**
+
+
+
+---
+
+## Organiser son travail
+
+
+Quand on entame un projet, les lignes de commande, scripts, tableaux créés et dossiers peuvent s'accumuler. Il est important d'organiser son travail dès le début.
+
+**Gérer ses projets** : 
+
+Vous créez un dossier par projet. Ce dossier est directement relié à votre projet et comporte des sous-dossiers "données", "scripts", "sorties" par exemple.
+
+Dès maintenant, créez un dossier pour le TD, comprenant un sous-dossier `data` dans lequel vous mettez les données BAAC téléchargées.
+
+Et enregistrez le script en cours dans ce dossier : "dataSHS_20.R"
+
+En haut à droite, une icône en forme de cube bleu permet de créer un **"nouveau projet"**. C'est un assistant de création d'un **dossier** dédié à un projet spécifique dans votre explorateur (windows, mac ou linux). Il sera associé à une **session de Rstudio**, qui sera indépendante des documents et objets utilisés pour un autre projet.
+
+ou bien File &gt; New Project &gt; Existing directory –&gt; Browse &gt; Sélectionner votre dossier créé pour le TD &gt; Create project
+
+Un fichier **Nom_du_dossier.Rproj** apparaît dans le dossier, c'est le raccourci qui mènera à la session R. Un fichier **.RData** sera également créé et contiendra les tableaux présents dans l'environnement.
+
+---
+## Commentaires
+
+Lire ou relire un programme, ce n'est pas lire un roman. Ca peut être fastidieux, surtout lorsque le programme n'est pas commenté. 
+
+Les commentaires permettent de comprendre la logique engagée sur une partie de programme, de préciser l'utilisation d'une fonction et d'organiser un script. Les commentaires sont précédés de **#** et ne sont pas exécutés.
+
+Pour passer un ensemble sélectionné en commentaire (et inversement) : **ctrl+shift+c**.
+
+Aérer le texte et mettre des titres facilitent aussi grandement la lecture de scripts : sur une ligne, **# Titre \-\-\-\- **
+
+
+**Enfin, il y a plusieurs façons d'arriver à un résultat recherché ; Il s'agit déjà de comprendre ce qu'on fait. On préferera l'écriture la plus concise et compréhensible**
+
+---
+
+##  Présentation - En résumé
+
+- RStudio est une interface de développement facilitant la gestion des scripts et des projets statistiques.
+
+    -&gt; Le script contient l'ensemble des instructions qu'on conservera
+    
+    -&gt; La console renvoie les retours des instructions et divers messages (informations, erreurs) ; on peut y exécuter du script qui ne sera pas enregistré
+    
+- Les **projets** sont des sessions qu'on associe à un dossier :
+
+    -&gt; Vous retrouvez votre session : script, objets, recodages et transformations déjà effectués
+    
+    -&gt; Renvoie directement à cet emplacement
+    
+    -&gt; Evite de mélanger les données et scripts portant sur différents sujets
+    
+    -&gt; Permet de partager l'ensemble du dossier
+
+---
+
+##  Présentation - En résumé
+
+=&gt; Veillez à :
+
+Organiser vos différents scripts à l'aide des **sections** et **commentaires**
+
+-&gt; un·e futur·e vous ou un·e collègue doit pouvoir se replonger facilement dans le code
+
+
+Ne laisser que le **code utile** ne comportant pas d'erreur ou d'instructions longues à exécuter et/ou inutile à exécuter (comme un install.packages). 
+
+-&gt; Jouez sur les zones **console** (retours et tests) et **script** (code enregistré). Dans l'idéal, vous devriez pouvoir exécuter l'ensemble du script sans erreur (le bouton "source" exécute l'ensemble du script dans l'ordre linéaire d'affichage et s'arrête à la première erreur).
+   
+---
+&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;
+&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;
+&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;
+
+&lt;h1 align="right"&gt;&lt;font color="#5C5C5C"&gt;2. Importer des données&lt;/font&gt;&lt;/h1&gt;
+
+
+---
+
+## Importations
+
+On peut créer des objets en explicitant leur contenu. Mais en général, on ne saisit pas directement les données dans R, elles sont recueillies dans un fichier (contenu dans un dossier de votre ordinateur ou en ligne) qu'on importe dans R en créant un **nouvel objet**, en choisissant la **fonction de lecture et d'importation adéquate** et en indiquant **l'endroit où se trouve ce fichier**.
+
+=&gt; Le tableau est importé dans R. Ce qui signifie que toutes les opérations effectuées sur ces tableaux ne sont effectives que dans R et **ne modifient pas le fichier source**.
+
+Le fichier source peut être en format :
+
+  - Texte (.txt, .csv),
+  - Tableur : Excel (xls, xlsx), Calc (.ods),
+  - Tables issues de logiciels statistiques : SAS (.sas7bdat), SPSS (sav),
+  - Format R : (.RData, .rds)
+  - html, xml, json, etc.
+
+
+Plusieurs **packages** facilitent l'importation directe de tableaux de données enregistrés dans divers formats (ex : package xlsx).
+
+---
+
+## Importer des fichiers textes (cvs, txt)
+
+Les fichiers sont enregistrés en CSV dans le sous-dossier "data" : On indique le chemin "data/nom_fichier.csv" :
+
+
+```r
+caracteristiques &lt;-read.csv2("data/caracteristiques-2019.csv", 
+                             fileEncoding = "UTF-8")
+# argument nécessaire : "SousDossiers/NomFichier.csv"
+# arguments qui peuvent être utiles :
+# - fileEncoding = format d'encodage des caractères
+# arguments par défaut :
+# header = TRUE/FALSE : La première ligne correspond-elle aux titres des variables ?
+# sep = "," : Choix du caractère séparant les cellules du tableau
+# dec ="," : Choix du caractère des décimales
+```
+
+*Note :*
+
+- `read.csv` quand le séparateur est une `,`
+- `read.csv2` quand le séparateur est un `;`
+- `read.table` pour les fichiers .txt et séparateur = `\t`
+
+
+---
+## Importation des 4 tables BAAC
+ -&gt; Sur ce modèle, importez les 3 autres tables BAAC : lieux, usagers et véhicules.
+
+--
+
+
+```r
+lieux &lt;-read.csv2("data/lieux-2019.csv",
+                  fileEncoding = "UTF-8")
+vehicules &lt;-read.csv2("data/vehicules-2019.csv", 
+                      fileEncoding = "UTF-8")
+usagers &lt;-read.csv2("data/usagers-2019.csv", 
+                    fileEncoding = "UTF-8")
+```
+
+---
+## Objet(s) R
+
+### Un objet R
+
+Fichier .rds :
+
+
+```r
+readRDS("my_data.rds")
+ChangementDeNom &lt;- readRDS("my_data.rds")
+```
+
+#### Plusieurs objets R
+
+... Contenus dans un fichier .RData (ou .rda) :
+
+
+```r
+load("data.RData") 
+# Restaure un environnement (ensemble des objets)
+# enregistré au préalable
+```
+
+
+---
+
+## Tableaux d'autres logiciels statistiques (sas, spss)
+
+Pour les bases de logiciels de statistiques (sas, spss, stata) : **Package {haven}** :
+
+```r
+library(haven)
+
+# SAS
+table &lt;- read_sas("mtcars.sas7bdat")
+write_sas(table, "mtcars.sas7bdat")
+
+# Stata
+table &lt;- read_dta("mtcars.dta")
+write_dta(table, "mtcars.dta")
+
+# SPSS
+table &lt;- read_sav("mtcars.sav")
+write_sav(table, "mtcars.sav")
+```
+
+Cf : https://github.com/tidyverse/haven
+
+
+---
+## Fichiers tableurs (xls, xlsx)
+
+Pour les fichiers excel : **Package {readxl}** :
+
+```r
+library(readxl)
+table &lt;-read_excel("fichier.xlsx", sheet = 3) 
+# ou read_xlsx
+```
+
+Fichiers dbf : **avec {foreign}**
+
+
+```r
+library(foreign)
+table &lt;- read.dbf("mtcars.dbf", as.is = TRUE ) 
+# as.is = TRUE pour modifier les variables qualitatives en factor
+```
+
+---
+## Exporter des données
+
+Format R (un objet) :
+
+```r
+saveRDS(Table, "Table.rds")
+Table &lt;- readRDS("Table.rds")
+```
+
+Ensemble de l'environnement :
+
+```r
+save(table1, table2, matrice, file = "mydata.RData")
+# ou
+save.image("mydata.RData") 
+# note : .rda est équivalent à .RData
+load("mydata.RData") 
+# /!\ importe l'ensemble, même si les objets 
+# existent déjà
+```
+
+Fichier texte :
+
+```r
+write.csv2(Table, "Table.csv",  na="", row.names = F)
+write.table(Table, "Table.txt", sep="\t") 
+# "clipboard" sous Windows pour copier 
+# dans le presse-papiers
+```
+
+---
+
+## Importation des données - En résumé
+
+Suivant les types des données à importer (leur extension), différentes fonctions d'importation seront utilisées : 
+
+- Pour les fichiers texte .csv : `read.csv2()` (;) ou `read.csv()` (,) ;
+- Pour les fichiers txt : `read.table()`
+
+Un package utile facilitant les importations et exportations (entre la session R et le dossier associé au projet) : `rio`, voir la &lt;a href="https://cran.r-project.org/web/packages/rio/vignettes/rio.html"&gt;vignette de présentation&lt;/a&gt;
+
+---
+
+
+&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;
+&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;
+&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;
+
+&lt;h1 align="right"&gt;&lt;font color="#5C5C5C"&gt;3. Exploration des données&lt;/font&gt;&lt;/h1&gt;
+
+
+---
+
+## Premier aperçu d'une table
+
+  
+
+```r
+head(usagers, 10) 
+```
+
+```
+##      Num_Acc id_vehicule num_veh place catu grav sexe an_nais trajet secu1
+## 1  2.019e+11 138 306 524     B01     2    2    4    2    2002      0     1
+## 2  2.019e+11 138 306 524     B01     1    1    4    2    1993      5     1
+## 3  2.019e+11 138 306 525     A01     1    1    1    1    1959      0     1
+## 4  2.019e+11 138 306 523     A01     1    1    4    2    1994      0     1
+## 5  2.019e+11 138 306 520     A01     1    1    1    1    1996      0     1
+## 6  2.019e+11 138 306 520     A01     2    2    4    2    1930      9     1
+## 7  2.019e+11 138 306 521     B01     1    1    4    1    1995      9     1
+## 8  2.019e+11 138 306 522     C01     1    1    1    1    1966      1     1
+## 9  2.019e+11 138 306 517     A01     1    1    1    1    1993      0     1
+## 10 2.019e+11 138 306 518     B01     1    1    1    1    1968      5     1
+##    secu2 secu3 locp actp etatp
+## 1      0    -1   -1   -1    -1
+## 2      0    -1   -1   -1    -1
+## 3      0    -1   -1   -1    -1
+## 4      0    -1   -1   -1    -1
+## 5      0    -1   -1    0    -1
+## 6      0    -1   -1    0    -1
+## 7      0    -1   -1    0    -1
+## 8      0    -1   -1    0    -1
+## 9      8    -1   -1    0    -1
+## 10     8    -1   -1    0    -1
+```
+
+```r
+# Aperçu des 10 1ères lignes (6 par défaut)
+```
+
+
+---
+
+## Premier aperçu d'une table
+
+
+```r
+dim(usagers) # dimension du tableau
+```
+
+```
+## [1] 132977     15
+```
+
+```r
+*names(usagers)
+```
+
+```
+##  [1] "Num_Acc"     "id_vehicule" "num_veh"     "place"       "catu"       
+##  [6] "grav"        "sexe"        "an_nais"     "trajet"      "secu1"      
+## [11] "secu2"       "secu3"       "locp"        "actp"        "etatp"
+```
+
+```r
+# Nom des variables
+```
+
+---
+
+## Premier aperçu d'une table
+
+
+```r
+str(usagers) 
+```
+
+```
+## 'data.frame':	132977 obs. of  15 variables:
+##  $ Num_Acc    : num  2.02e+11 2.02e+11 2.02e+11 2.02e+11 2.02e+11 ...
+##  $ id_vehicule: Factor w/ 98670 levels "137 982 129",..: 98669 98669 98670 98668 98665 98665 98666 98667 98662 98663 ...
+##  $ num_veh    : Factor w/ 29 levels "\\01","A01","B01",..: 3 3 2 2 2 2 3 4 2 3 ...
+##  $ place      : int  2 1 1 1 1 2 1 1 1 1 ...
+##  $ catu       : int  2 1 1 1 1 2 1 1 1 1 ...
+##  $ grav       : int  4 4 1 4 1 4 4 1 1 1 ...
+##  $ sexe       : int  2 2 1 2 1 2 1 1 1 1 ...
+##  $ an_nais    : int  2002 1993 1959 1994 1996 1930 1995 1966 1993 1968 ...
+##  $ trajet     : int  0 5 0 0 0 9 9 1 0 5 ...
+##  $ secu1      : int  1 1 1 1 1 1 1 1 1 1 ...
+##  $ secu2      : int  0 0 0 0 0 0 0 0 8 8 ...
+##  $ secu3      : int  -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 ...
+##  $ locp       : int  -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 ...
+##  $ actp       : Factor w/ 13 levels "0","1"," -1",..: 3 3 3 3 1 1 1 1 1 1 ...
+##  $ etatp      : int  -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 ...
+```
+
+```r
+# Nom, type des variables et premières observations
+```
+
+
+---
+## Explorer une colonne nominale
+
+### Modalités uniques
+
+
+```r
+unique(usagers$catu) # modalités uniques
+```
+
+```
+## [1] 2 1 3
+```
+
+```r
+class(usagers$catu) # type de la colonne
+```
+
+```
+## [1] "integer"
+```
+
+```r
+# n'ayant rencontré que des chiffres dans cette colonne,
+# R l'interprète comme étant de type "integer" = "nombre entier"
+```
+*Remarques :* On pourrait vouloir modifier le type de la colonne et les valeurs affichées -&gt; partie suivante
+
+---
+## Explorer une colonne nominale
+
+### Effectifs
+
+
+```r
+table(usagers$sexe) 
+```
+
+```
+## 
+##     1     2 
+## 90384 42593
+```
+
+```r
+# Nombre d'observations pour chaque modalité
+
+table(usagers$sexe, useNA="ifany") 
+```
+
+```
+## 
+##     1     2 
+## 90384 42593
+```
+
+```r
+# Ajout des NA : Non-attribués, sans valeur, s'il y en a
+
+addmargins(
+  table(usagers$sexe, useNA="ifany")
+  ) 
+```
+
+```
+## 
+##      1      2    Sum 
+##  90384  42593 132977
+```
+
+```r
+# Ajout de l'ensemble
+```
+
+---
+## Explorer une colonne nominale
+
+### Pourcentages
+
+
+```r
+prop.table(
+  table(usagers$sexe)
+  )*100 # En pourcentages
+```
+
+```
+## 
+##        1        2 
+## 67.96965 32.03035
+```
+
+```r
+round(
+  prop.table(table(usagers$sexe))*100,
+  1) # En pourcentages arrondis
+```
+
+```
+## 
+##  1  2 
+## 68 32
+```
+
+
+---
+## Explorer une colonne nominale
+
+
+```r
+library(questionr)
+freq(usagers$sexe, sort="dec",total=T) 
+```
+
+```
+##            n   % val%
+## 1      90384  68   68
+## 2      42593  32   32
+## Total 132977 100  100
+```
+
+```r
+# sort="dec" pour trier par ordre décroissant,
+# cum = T pour les %ages cumulés, total= T pour avoir le total,
+# valid = F pour enlever la colonne val%
+```
+
+---
+## Mise en pratique
+
+-&gt; Quelles sont les proportions des catégories d'usagers ?
+
+
+--
+
+-&gt; Quelles sont les proportions des catégories d'usagers ?
+
+
+```r
+freq(usagers$catu, valid=F, sort="dec", total=T)
+```
+
+```
+##            n     %
+## 1      97356  73.2
+## 2      24356  18.3
+## 3      11265   8.5
+## Total 132977 100.0
+```
+
+---
+
+## Explorer une colonne numérique
+
+### Indices de centralité et de répartition
+
+
+```r
+# Moyenne :
+mean(usagers$an_nais, na.rm=T)
+```
+
+```
+## [1] 1980.08
+```
+
+```r
+# Moyenne arrondie :
+round(
+  mean(usagers$an_nais, na.rm=T),
+  digits = 0)
+```
+
+```
+## [1] 1980
+```
+
+```r
+# Moyenne tronquée :
+trunc(
+  mean(usagers$an_nais, na.rm=T),
+  digits = 0)
+```
+
+```
+## [1] 1980
+```
+
+
+---
+
+## Explorer une colonne numérique
+
+### Indices de centralité et de répartition
+
+
+```r
+# Médiane :
+median(usagers$an_nais, na.rm = T)
+```
+
+```
+## [1] 1983
+```
+
+```r
+# Quartiles, moyenne et nombre de non-attribués
+summary(usagers$an_nais)
+```
+
+```
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##    1900    1967    1983    1980    1995    2019
+```
+
+```r
+# Quantile (avec pas au choix)
+quantile(usagers$an_nais, seq(0,1,.1), na.rm=T) # déciles
+```
+
+```
+##   0%  10%  20%  30%  40%  50%  60%  70%  80%  90% 100% 
+## 1900 1953 1963 1971 1977 1983 1989 1993 1997 2001 2019
+```
+
+
+---
+## Exploration des données - En résumé
+
+- **Effectifs** avec `table` : `table(1ereVariable, 2èmeVariable)`
+
+- **Effectifs et poucentages sur une variable** avec `freq` : `freq(variable)`
+- **Pourcentages** avec `prop.table`, `rprop` et `cprop` s'appliquant sur une table d'effectifs : `rprop(table(1èreVariable, 2èmeVariable))`
+
+- **Indices de répartition** : `min`, `max`, `sd`, `mean`, `median` et `summary`.
+
+- **Appliquer une fonction par groupe** : `tapply(VariableCalcul, VariableGroupe, Fonction, OptionsEventuelles`)
+
+
+---
+
+&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;
+&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;
+&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;
+
+&lt;h1 align="right"&gt;&lt;font color="#5C5C5C"&gt;3. Mise en forme des données&lt;/font&gt;&lt;/h1&gt;
+
+
+---
+
+## Recodages de modalités
+
+Les tableaux de données ne se présentent pas toujours sous une forme directement exploitable et doivent être nettoyés et retravaillés au fur et à mesure des traitements.
+
+La première opération consiste à recoder les variables dont les modalités apparaissent parfois en codes, pour un gain de place. Des données issues d’extractions automatiques (scraping) seront plus complexes à nettoyer et il faudra faire appel à des fonctions et opérations plus complexes (comme par exemple l’utilisation des expressions régulières, permettant de repérer et d’agir sur des formats récurrents de chaînes de caractères ou caractères spéciaux. Voir : https://data.hypotheses.org/959) ; Nous ne verrons pas ces formes plus complexes de recodage et de nettoyage.
+
+Une des limites du langage R est aussi une de ses qualités : la possibilité de créer et de diffuser des fonctions et des packages facilement implique que, selon les packages utilisés, la syntaxe peut varier.
+
+Le package `tidyverse` regroupe d'autres packages complémentaires qui ont été pensés selon une syntaxe commune et dont les principaux sont :
+
+- `readr` : importation
+- `tibble` : format des tableaux de données
+- `forcats` : mise en forme des facteurs
+- `stringr` : modification de chaînes de caractères
+- `tidyr` et `dplyr` : mise en forme de tableaux
+- `ggplot2` : graphiques
+
+
+---
+
+## Utiliser les conditions
+
+**Opérateurs utiles :**
+
+- == : Egalité (A == B signifie "A est égal à B")
+- != : Exclusion ( A != B signifie "A est différent de B")
+- &lt; , &gt; , &lt;= , &gt;= : inférieur, supérieur, inférieur ou égal, supérieur à égal
+- %in% : appartient à
+
+**Enchaînements de plusieurs conditions :**
+
+- | : Ou bien
+- &amp; : Et
+
+---
+## Recodage par assignation d'une variable qualitative
+
+
+```r
+names(usagers)
+```
+
+```
+##  [1] "Num_Acc"     "id_vehicule" "num_veh"     "place"       "catu"       
+##  [6] "grav"        "sexe"        "an_nais"     "trajet"      "secu1"      
+## [11] "secu2"       "secu3"       "locp"        "actp"        "etatp"
+```
+
+```r
+head(usagers$sexe)
+```
+
+```
+## [1] 2 2 1 2 1 2
+```
+
+```r
+class(usagers$sexe)
+```
+
+```
+## [1] "integer"
+```
+
+```r
+# Modifier le "type" d'une variable (si R a mal interprété, par exemple)
+```
+
+---
+## Recodage par assignation d'une variable qualitative
+
+Avec la syntaxe `tidyverse`, le recodage peut se faire terme à terme avec `fct_collapse`. Attention, cette fonction porte sur des variables de type `factor`, il faut penser à transformer le type de la colonne avant :
+
+
+```r
+usagers$sexe &lt;- factor(usagers$sexe)
+class(usagers$sexe)
+```
+
+```
+## [1] "factor"
+```
+
+- Modifier en réel entier (integer) : `as.integer()`
+
+- Modifier en réel à décimales (numeric) : `as.numeric()`
+
+- Modifier en variable binaire (logical) : `as.logical()`
+
+- Modifier en date : `as.Date()`
+
+---
+
+Puis recodage à l'aide du dictionnaire des codes fourni dans la documentation et de la fonction `fct_collapse` :
+
+
+```r
+# sexe
+usagers$sexe &lt;- fct_collapse(usagers$sexe,
+                           "Homme"="1",
+                           "Femme"="2")
+```
+
+Il est possible de condenser ces deux opérations : Exemple avec le recodage de la colonne `grav` :
+
+
+```r
+# grav
+usagers$grav &lt;- fct_collapse(factor(usagers$grav),
+                                 "Indemne"="1",
+                                 "Tué" ="2",
+                                 "Blessé hospitalisé"="3",
+                                 "Blessé léger"="4")
+levels(usagers$grav)
+```
+
+```
+## [1] "Indemne"            "Tué"                "Blessé hospitalisé"
+## [4] "Blessé léger"
+```
+
+```r
+# levels() nous donne les différentes modalités
+```
+
+**=&gt; De la même façon, recodez les variables `catu` et `traj`**
+
+---
+## Recodage des variables `catu` et `traj`
+
+
+```r
+# catu
+usagers$catu  &lt;- fct_collapse(factor(usagers$catu),
+"Piéton" = "3",
+"Conducteur"="1",
+"Passager"="2")
+
+# traj
+usagers$trajet &lt;- fct_collapse(factor(usagers$trajet),
+                                 "Domicile/travail ou école"=c("1","2"),
+                                 "Courses/achats"="3",
+                                 "Utilisation professionnelle"="4",
+                                 "Promenade/loisirs"="5",
+                                 "Autre"="9",
+                               "NR"=c("0","-1"))
+# fct_collapse permet de recoder 2 valeurs en une unique
+levels(usagers$trajet)
+```
+
+```
+## [1] "NR"                          "Domicile/travail ou école"  
+## [3] "Courses/achats"              "Utilisation professionnelle"
+## [5] "Promenade/loisirs"           "Autre"
+```
+
+
+---
+### Recodages de la table Caractéristiques
+
+-&gt; Dans la table `caracteristiques`, recodez les colonnes `lum`, `agg` et `atm`
+---
+### Recodages de la table Caractéristiques
+
+
+```r
+# Luminosité
+caracteristiques$lum &lt;- fct_collapse(factor(caracteristiques$lum),
+                           "Jour"="1",
+                           "Aube/crépuscule"="2",
+                           "Nuit (sans écl.)"=c("3","4"),
+                           "Nuit (avec écl.)"="5")
+# Agglomération
+caracteristiques$agg &lt;- fct_recode(factor(caracteristiques$agg),
+                           "Hors agglo."="1",
+                           "En agglo."="2")
+```
+
+---
+### Recodages de la table Caractéristiques
+
+
+```r
+# Conditions atmosphériques
+caracteristiques$atm &lt;- fct_recode(factor(caracteristiques$atm),
+                         "Normales"="1",
+                         "Pluie légère"="2",
+                         "Pluie forte" ="3",
+                         "Neige, grêle"="4",
+                         "Brouillard"="5",
+                         "Vent fort, tempête"="6",
+                         "Temps éblouissant"="7",
+                         "Temps couvert"="8",
+                         "Autre" = "9")
+```
+
+---
+### Calculs sur les variables
+
+
+```r
+# /!\ 2 valeurs "aberrantes" :
+usagers$an_nais &lt;- na_if(usagers$an_nais,1900)
+usagers$an_nais &lt;- na_if(usagers$an_nais,1901)
+ 
+usagers$age &lt;- 2019 - as.integer(usagers$an_nais)
+```
+
+na_if transforme une modalité en NA = non-attribué. Les valeurs `NA` sont spécifiques. is.na() permet de les mettre en évidence :
+
+
+```r
+is.na(c(NA, "NA"))
+```
+
+```
+## [1]  TRUE FALSE
+```
+
+### Création de catégories
+
+
+```r
+# Selon une séquence définie :
+seq(0,10,1)
+```
+
+```
+##  [1]  0  1  2  3  4  5  6  7  8  9 10
+```
+
+```r
+# = séquence allant de 0 a 10 avec un pas de 1
+usagers$age_classe &lt;- cut(usagers$age, seq(0,110,10), 
+*                                   right=F)
+# right = F permet de borner à l'inférieur et non au supérieur
+```
+---
+
+
+## Recodages conditionnels : créer de nouvelles variables à partir de celles existantes
+
+2 fonctions principales permettent de recoder des variables sur conditions :
+
+- `ifelse(condition, si condition remplie, si condition non remplie)` :
+
+Créer une variable qui distingue les accidents ayant eu lieu dans les Hauts-de-France :
+
+```r
+caracteristiques$HdF &lt;- ifelse (caracteristiques$dep %in% c("59","62","80","60","2"), 
+                      "Hauts de France", 
+                      "Hors Hauts de France")
+```
+
+---
+
+- `case_when( conditions 1 ~ effet de la condition 1 ,condition 2 ~ effet de la condition 2,etc,TRUE ~ effet si aucune condition n'est remplie)`
+
+Permet d'enchaîner plusieurs conditions à la suite. Exemple avec l'heure à laquelle a eu lieu l'accident :
+
+
+
+```r
+head(caracteristiques$hrmn)
+```
+
+```
+## [1] 01:30 02:50 15:15 20:20 04:00 14:03
+## 1386 Levels: 00:00 00:01 00:02 00:03 00:04 00:05 00:06 00:07 00:08 ... 23:59
+```
+
+```r
+caracteristiques$hrmn &lt;- gsub(":","",caracteristiques$hrmn)
+
+caracteristiques$hrmn &lt;- as.numeric(caracteristiques$hrmn)
+
+caracteristiques$hrmnCl &lt;- case_when(caracteristiques$hrmn &lt; 600 ~ "00h-05h59",
+                          caracteristiques$hrmn &lt; 1000 ~ "06h-09h59",
+                          caracteristiques$hrmn &lt; 1400 ~ "10h-13h59",
+                          caracteristiques$hrmn &lt; 1700 ~ "14h-16h59",
+                          caracteristiques$hrmn &lt; 2000 ~ "17h-19h59",
+                          caracteristiques$hrmn &lt; 2400 ~ "20h-23h59",
+                          T ~ "")
+unique(caracteristiques$hrmnCl)
+```
+
+```
+## [1] "00h-05h59" "14h-16h59" "20h-23h59" "06h-09h59" "17h-19h59" "10h-13h59"
+```
+
+
+
+---
+## Sélections, filtres et tris
+
+Suivant ce qu'on recherche, on peut chercher à ne conserver que certaines colonnes ou lignes d'un tableau (lorsqu'on s'intéresse à une sous-population par exemple).
+
+
+### Sélection de colonnes `select`
+
+```r
+ # Sélections de colonnes relatives aux dates,
+# dans la table caracteristiques :
+Date &lt;- select(caracteristiques, Num_Acc, mois, jour, hrmn)
+```
+
+avec `caracteristiques` (tableau de données) en 1er argument puis les colonnes qu'on souhaite conserver séparées par une ",".
+
+---
+### ...et de lignes : `slice`
+
+```r
+# 4 premières lignes :
+slice(usagers,1:4) 
+```
+
+```
+##     Num_Acc id_vehicule num_veh place       catu         grav  sexe an_nais
+## 1 2.019e+11 138 306 524     B01     2   Passager Blessé léger Femme    2002
+## 2 2.019e+11 138 306 524     B01     1 Conducteur Blessé léger Femme    1993
+## 3 2.019e+11 138 306 525     A01     1 Conducteur      Indemne Homme    1959
+## 4 2.019e+11 138 306 523     A01     1 Conducteur Blessé léger Femme    1994
+##              trajet secu1 secu2 secu3 locp actp etatp age age_classe
+## 1                NR     1     0    -1   -1   -1    -1  17    [10,20)
+## 2 Promenade/loisirs     1     0    -1   -1   -1    -1  26    [20,30)
+## 3                NR     1     0    -1   -1   -1    -1  60    [60,70)
+## 4                NR     1     0    -1   -1   -1    -1  25    [20,30)
+```
+
+---
+### ...selon des conditions : Filtres : `filter`
+
+```r
+usagersPietons &lt;- filter(usagers, catu=="Piéton")
+```
+
+la table `usagersPietons` ne contient plus que les lignes concernant les piétons.
+
+
+### Trier des données : `arrange`
+
+```r
+usagers &lt;- arrange(usagers, desc(age))
+# desc() pour trier par ordre décroissant
+```
+
+---
+## Mise en pratique
+
+-&gt; A l'aide des fonctions que nous venons de voir, présentez l'âge, la gravité de l'accident et la catégorie d'usagers des 2 hommes les plus âgés.
+
+---
+## Mise en pratique
+
+On peut encaster les fonctions ou les écrire à la suite.
+
+```r
+slice(
+  select(
+    arrange(
+      filter(
+        usagers, sexe=="Homme"),
+      desc(age)),
+    age, grav, catu),
+  1:2)
+```
+
+```
+##   age         grav       catu
+## 1 100 Blessé léger Conducteur
+## 2  99 Blessé léger     Piéton
+```
+... il faut lire de l’intérieur vers l’extérieur, difficile de voir les arguments associés à chaque fonction.
+
+---
+### Mise en pratique
+
+Ou bien
+
+```r
+exo &lt;- filter(usagers, sexe=="Homme")
+exo &lt;- arrange(exo, desc(age))
+exo &lt;- select(exo, age, grav, catu)
+exo &lt;- slice(exo, 1:2)
+exo
+```
+
+```
+##   age         grav       catu
+## 1 100 Blessé léger Conducteur
+## 2  99 Blessé léger     Piéton
+```
+Création d'un objet intermédiaire qui n'est pas si nécessaire.
+
+---
+## L'opérateur ` %&gt;% ` (pipe)
+
+L'opérateur `%&gt;%` (*pipe*, ctrl+shift+m) permet d’enchainer les fonctions en prenant comme argument principal le résultat de la fonction précédente : `f(a)` s’écrit `a %&gt;% f()` ; Ce qui est à gauche de ` %&gt;% ` est basculé en premier argument de ce qui suit l'opérateur.
+
+table %&gt;% 
+fonction1() %&gt;% 
+fonction2()
+
+au lieu de fonction2(fonction1(table))
+
+Ce qui, pour l'exemple, donne :
+
+
+```r
+usagers %&gt;% 
+  filter(sexe=="Homme") %&gt;% 
+  arrange(desc(age)) %&gt;% 
+  select(age, grav, catu) %&gt;% 
+  slice(1:2)
+```
+
+```
+##   age         grav       catu
+## 1 100 Blessé léger Conducteur
+## 2  99 Blessé léger     Piéton
+```
+
+---
+## Résumé de la partie 3 - Mise en forme des données
+
+### Recodage de variable nominale pas assignation
+
+- Transformer la colonne en type `factor` :
+
+```r
+usagers$grav &lt;- factor(usagers$grav)
+```
+
+- Recoder terme à terme avec `fct_collapse` :
+
+```r
+usagers$grav &lt;- fct_collapse(usagers$grav,
+                                 "Indemne"="1",
+                                 "Tué" ="2",
+                                 "Blessé hospitalisé"="3",
+                                 "Blessé léger"="4")
+```
+
+- Sortir les modalités recodées avec `levels`
+
+
+```r
+levels(usagers$grav)
+```
+
+```
+## [1] "Indemne"            "Tué"                "Blessé hospitalisé"
+## [4] "Blessé léger"
+```
+
+
+---
+## Mise en forme des données - En résumé
+
+### Recodages conditionnels : créer de nouvelles variables à partir de celles existantes
+
+2 fonctions principales permettent de recoder des variables sur conditions :
+
+- `ifelse(condition, si condition remplie, si condition non remplie)` :
+
+- `case_when( conditions 1 ~ effet de la condition 1 ,
+condition 2 ~ effet de la condition 2,
+etc,
+TRUE ~ effet si aucune condition n'est remplie)`
+
+---
+## Mise en forme des données - En résumé
+
+### Sélections, filtres et tris
+
+Les principales fonctions permettant de réarranger les tables via tydiverse sont :
+
+- `select(table, colonnes à conserver)` : Sélection de colonnes
+- `filter(table, condition du filtre)` : Sélection de lignes
+- `arrange(table, colonnes sur laquelle faire le tri, desc(2ème colonne sur laquelle faire un tri décroissant))` : Tri de la table
+- `slice(table, position des lignes à conserver)` : Sélection de lignes selon leur position
+
+- L'opérateur `%&gt;%` (*pipe*, ctrl+shift+m) permet d'enchaîner des fonctions : `f(a)` s’écrit `a %&gt;% f()`.
+
+---
+
+&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;
+&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;
+&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;
+
+&lt;h1 align="right"&gt;&lt;font color="#5C5C5C"&gt;4. Opérations sur les tables&lt;/font&gt;&lt;/h1&gt;
+
+
+---
+
+## Regroupements de lignes
+
+Il peut être intéressant de regrouper plusieurs observations selon un ou plusieurs critères afin de produire des calculs. La fonction `group_by` permet de produire ces regroupements et est associée à une fonction de calcul dans `summarise`.
+
+### Exemple 1 : Compter le nombre d'usagers moyen par accident
+
+
+```r
+NbUsagers &lt;- usagers %&gt;% 
+* group_by(Num_Acc) %&gt;%
+* summarise(NbUsagers = n())
+# n() compte le nombre de lignes
+mean(NbUsagers$NbUsagers)
+```
+
+```
+## [1] 2.259976
+```
+---
+
+## Mise en pratique
+
+-&gt; De la même façon, quel est le nombre maximum de véhicules impliqués ?
+
+---
+
+## Mise en pratique
+
+-&gt; De la même façon, quel est le nombre maximum de véhicules impliqués ?
+
+
+
+```r
+NbVehicules &lt;- vehicules %&gt;% 
+  group_by(Num_Acc) %&gt;% 
+  summarise(NbVehicules = n())
+
+max(NbVehicules$NbVehicules)
+```
+
+```
+## [1] 12
+```
+
+---
+
+
+## Regroupements de lignes
+
+### Exemple 3 : Moyenne d'âge et nombre de personnes impliquées par accident
+
+En ne présentant que les 10 premières observations :
+
+
+```r
+usagers %&gt;% 
+  group_by(Num_Acc) %&gt;% 
+  summarise(AgeMoy = mean(age),
+            NbPers = n()) %&gt;% 
+  head(6)
+```
+
+```
+## # A tibble: 6 x 3
+##        Num_Acc AgeMoy NbPers
+##          &lt;dbl&gt;  &lt;dbl&gt;  &lt;int&gt;
+## 1 201900000001   34.3      3
+## 2 201900000002   25        1
+## 3 201900000003   47.2      4
+## 4 201900000004   38.2      4
+## 5 201900000005   21        3
+## 6 201900000006   55.5      2
+```
+
+```r
+# pour ne sortir que les 6 premières observations
+```
+
+
+---
+## Jointures de tables
+
+Les données sur les accidents sont organisées en plusieurs tables relatives à plusieurs unités statistiques (l'événement "accident" des tables caractéristiques et lieux, les véhicules impliqués et les usagers impliqués). 
+
+On remarque d'ailleurs que le nombre d'observations pour les tables de chaque type d'unité varie. Il est toutefois possible de les regrouper si on dispose d'une clé d'appariemment (une variable commune à deux tables permettant d'associer les accidents avec les personnes et les véhicules concernés).
+
+### Exemple 1 : Jointure des tables "Caractéristiques" et "lieux", pas de problème d'unité puisque c'est la même :
+
+
+```r
+Accident &lt;- merge (x = caracteristiques, y = lieux, by = "Num_Acc")
+```
+
+Les 2 tables ont le même nombre de lignes etles identifiants "Num_Acc" sont unique (un numéro n'apparait qu'une fois dans chacune des tables)
+
+---
+## Jointures de tables
+
+### Exemple 2 : Ajout des caractéristiques de l'accident dans la table usagers
+
+En revanche, ici, il faut faire un choix car plusieurs usagers peuvent être concernés par un même accident. On peut ajouter les informations de l'accident à la table usagers et non l'inverse.
+
+
+```r
+usagers &lt;- merge (x = usagers, y = Accident, by = "Num_Acc", all.x = T)
+```
+
+
+---
+## Jointures de tables
+
+Attention, on ne peut joindre que 2 tables à la fois.
+
+*Options :*
+
+- Pour garder toutes les observations de la 1ère table déclarée : all.x = T
+- Pour garder toutes les observations de la 2nde table déclarée : all.y = T
+- Pour garder toutes les observations des deux tables : all = T
+- Possibilité d'avoir une clé qui porte un nom différent dans les tables : by.x = "id_table_x", by.y = "id_table_y"
+- Possibilité d'avoir 2 colonnes clés : by = c("id1","id2")
+
+
+---
+
+## Opérations sur les tables - En résumé
+
+La fonction `group_by` permet de **produire des regroupements** et est associée à une fonction de calcul dans `summarise`.
+
+
+**Pour joindre des tables** (et produire des calculs sur des colonnes issues de 2 tables différentes), il faut :
+
+- Les noms des tables
+- Le ou les noms de la ou des colonnes d'appariemment (clés de jointure)
+- Identifier les unités statistiques des tables et décider de la table ou des tables dont on conservera la/les structure(s)
+
+
+Voir la cheatsheet sur `dplyr` et `tidyr` : https://thinkr.fr/pdf/dplyr-french-cheatsheet.pdf
+
+
+---
+### Mise en pratique
+
+- Quelle est la gravité des accidents pour les piétons selon l'heure de la journée ?
+
+---
+### Mise en pratique
+
+- Quelle est la gravité des accidents pour les piétons selon l'heure de la journée ?
+
+
+
+```r
+Pietons &lt;- usagers %&gt;% filter(catu=="Piéton")
+rprop(table(Pietons$hrmnCl, Pietons$grav))
+```
+
+```
+##            
+##             Indemne Tué   Blessé hospitalisé Blessé léger Total
+##   00h-05h59   3.3    17.0  33.3               46.4        100.0
+##   06h-09h59   2.3     4.8  29.1               63.8        100.0
+##   10h-13h59   2.4     4.0  29.0               64.6        100.0
+##   14h-16h59   3.4     3.7  27.8               65.2        100.0
+##   17h-19h59   3.1     3.4  28.3               65.3        100.0
+##   20h-23h59   3.3     7.0  28.0               61.8        100.0
+##   Ensemble    2.9     4.7  28.7               63.7        100.0
+```
+
+
+
+---
+## Croiser deux variables nominales
+
+
+```r
+addmargins(table(usagers$sexe, usagers$catu))
+```
+
+```
+##        
+##         Conducteur Passager Piéton    Sum
+##   Homme      72607    12116   5661  90384
+##   Femme      24749    12240   5604  42593
+##   Sum        97356    24356  11265 132977
+```
+---
+## Croiser deux variables nominales
+
+
+```r
+prop.table(table(usagers$sexe, usagers$catu),1) # 2 en colonnes
+```
+
+```
+##        
+##         Conducteur   Passager     Piéton
+##   Homme 0.80331696 0.13405027 0.06263277
+##   Femme 0.58105792 0.28737116 0.13157092
+```
+
+```r
+round(prop.table(table(usagers$sexe, usagers$catu),1)*100,1)
+```
+
+```
+##        
+##         Conducteur Passager Piéton
+##   Homme       80.3     13.4    6.3
+##   Femme       58.1     28.7   13.2
+```
+---
+## Croiser deux variables nominales
+
+
+
+```r
+# avec questionr :
+rprop(table(usagers$sexe, usagers$catu)) 
+```
+
+```
+##           
+##            Conducteur Passager Piéton Total
+##   Homme     80.3       13.4      6.3  100.0
+##   Femme     58.1       28.7     13.2  100.0
+##   Ensemble  73.2       18.3      8.5  100.0
+```
+
+```r
+# cprop en colonnes et prop pour les pourcentages totaux
+```
+
+
+---
+### Une variable numérique et une nominale
+
+**...en utilisant `group_by` et `summarise` :**
+
+
+```r
+usagers %&gt;% 
+  group_by(catu) %&gt;% 
+  summarise(min = min(age, na.rm = T),
+            max = max(age, na.rm = T),
+            mean = round(mean(age, na.rm = T), 1),
+            mediane = median(age, na.rm = T))
+```
+
+```
+## # A tibble: 3 x 5
+##   catu         min   max  mean mediane
+##   &lt;fct&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+## 1 Conducteur     0   100  40.5      38
+## 2 Passager       0   108  30.3      24
+## 3 Piéton         0    99  42.8      41
+```
+
+
+---
+## Mise en pratique
+
+-&gt; Quel est l'âge médian des conducteur·rices selon le type de trajet qu'ils et elles effectuaient au moment de l'accident ?
+
+---
+## Mise en pratique
+
+-&gt; Quel est l'âge médian des conducteur·rices selon le type de trajet qu'ils et elles effectuaient au moment de l'accident ?
+
+
+```r
+usagers %&gt;% 
+  filter(catu=="Conducteur") %&gt;% 
+  group_by(trajet) %&gt;% 
+  summarise(AgeMedian = median(age, na.rm=T)) %&gt;% 
+  arrange(AgeMedian)
+```
+
+```
+## # A tibble: 6 x 2
+##   trajet                      AgeMedian
+##   &lt;fct&gt;                           &lt;dbl&gt;
+## 1 NR                                 37
+## 2 Domicile/travail ou école          37
+## 3 Autre                              37
+## 4 Promenade/loisirs                  38
+## 5 Utilisation professionnelle        40
+## 6 Courses/achats                     51
+```
+
+
+---
+# Ressources
+
+
+**R généralités :**
+
+- Guay, Jean-Herman. *Statistiques en sciences humaines avec R: sciences sociales et psychologie.* [Louvain-la-Neuve]; [Québec]: De Boeck ; [Presses universitaires de Laval], 2014.
+
+- Larmarange, Joseph, et alii. «Introduction à l’analyse d’enquêtes avec R et RStudio», s.d.
+  https://larmarange.github.io/analyse-R/ 
+
+- Barnier, Julien, "R_pour_sociologues.pdf"
+  http://www.info.univ-angers.fr/~gh/tuteurs/R_pour_sociologues.pdf 
+  
+- R for data science : https://r4ds.had.co.nz/
+
+- Nathaniel D. Phillips, YaRrr! The Pirate’s Guide to R : https://bookdown.org/ndphillips/YaRrr/
+
+
+**Cheat Sheet : https://www.rstudio.com/resources/cheatsheets/ **
+
+- Rstudio : https://github.com/rstudio/cheatsheets/raw/master/rstudio-ide.pdf
+- Readr : https://github.com/rstudio/cheatsheets/raw/master/data-import.pdf
+- stringr : https://github.com/rstudio/cheatsheets/raw/master/strings.pdf
+- dplyr : https://github.com/rstudio/cheatsheets/raw/master/data-transformation.pdf
+- ggplot2 : https://github.com/rstudio/cheatsheets/raw/master/data-visualization-2.1.pdf
+
+---
+**Tidyverse :**
+
+- Barnier Julien, "Introduction à R et au tidyverse", Octobre 2017, Consulté le 25 octobre 2017
+  https://juba.github.io/tidyverse/index.html
+
+**Ggplot2 :**
+
+- Documentation de référence: https://ggplot2.tidyverse.org/reference/
+
+- *R graphics cookbook*, Winston Chang, O'Reilly books, 2013 : https://r-graphics.org/
+
+- http://www.r-graph-gallery.com/portfolio/ggplot2-package/
+
+- http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf
+
+
+**Aides en ligne et sites ressources :**
+
+- http://stackoverflow.com/ : Large source d'informations, anglophone
+  
+- http://forums.cirad.fr/logiciel-R/ : Francophone
+  
+- http://www.statmethods.net/ : Quick-R
+  
+- http://rfunction.com/
+
+- http://informatique-mia.inra.fr/r4ciam/
+  
+- https://cran.r-project.org/web/views/ : Packages du CRAN
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
