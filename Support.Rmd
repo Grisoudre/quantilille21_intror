@@ -37,9 +37,12 @@ xaringanExtra::use_panelset()
 
 --
 
--> **Document support à télécharger :** https://grisoudre.github.io/quantilille21_intror/support.html
+-> **Accès au support de formation :**
 
-Le support vous aide à suivre la formation, vous pouvez directement copier/coller les codes proposés. Il peut être téléchargé sur https://github.com/Grisoudre/quantilille21_intror. Le fichier .html contient l'ensemble de la présentation et s'ouvre via un nagivateur web (firefox, chrome, opera, etc).
+- *Consulter* : https://grisoudre.github.io/quantilille21_intror/Support.html et https://grisoudre.github.io/quantilille21_intror/Support_lineaire.html
+- *Télécharger* : https://github.com/Grisoudre/quantilille21_intror
+
+Le support vous aide à suivre la formation, vous pouvez directement copier/coller les codes proposés. Il peut être téléchargé sur https://github.com/Grisoudre/quantilille21_intror (télécharger l'ensemble des fichiers). Le fichier .html contient l'ensemble de la présentation et s'ouvre via un nagivateur web (firefox, chrome, opera, etc).
 
 
 
