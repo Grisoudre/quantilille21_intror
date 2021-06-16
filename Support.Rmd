@@ -420,7 +420,9 @@ Organiser vos différents scripts à l'aide des **sections** et **commentaires**
 Ne laisser que le **code utile** ne comportant pas d'erreur ou d'instructions longues à exécuter et/ou inutile à exécuter (comme un install.packages). 
 
 -> Jouez sur les zones **console** (retours et tests) et **script** (code enregistré). Dans l'idéal, vous devriez pouvoir exécuter l'ensemble du script sans erreur (le bouton "source" exécute l'ensemble du script dans l'ordre linéaire d'affichage et s'arrête à la première erreur).
-   
+
+-> *Pour aller plus loin* : voir le "Guide des bonnes pratiques", utilitR, Insee, https://www.pratiques.utilitr.org/index.html
+
 ---
 <br/><br/><br/><br/><br/>
 <br/><br/><br/><br/>
@@ -1368,7 +1370,7 @@ usagers %>%
 
 
 ---
-# Ressources
+## Ressources
 
 
 **R généralités :**
@@ -1386,6 +1388,14 @@ usagers %>%
 
 - Nathaniel D. Phillips, YaRrr! The Pirate’s Guide to R : https://bookdown.org/ndphillips/YaRrr/
 
+- Insee, utilitR, "Guide des bonnes pratiques" : https://www.pratiques.utilitr.org/index.html
+
+
+- Insee, utilitR, Documentation collaborative à destination des agents de l'Insee, https://www.book.utilitr.org/
+
+
+---
+## Ressources
 
 **Cheat Sheet : https://www.rstudio.com/resources/cheatsheets/ **
 
@@ -1395,7 +1405,9 @@ usagers %>%
 - dplyr : https://github.com/rstudio/cheatsheets/raw/master/data-transformation.pdf
 - ggplot2 : https://github.com/rstudio/cheatsheets/raw/master/data-visualization-2.1.pdf
 
+
 ---
+## Ressources
 
 **Aides en ligne et sites ressources :**
 
