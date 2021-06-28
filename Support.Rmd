@@ -29,7 +29,7 @@ xaringanExtra::use_panelset()
 
 --
 
--> Exprimez vos difficultés et incompréhensions pour éviter quelles s'accumulent
+-> Exprimez vos difficultés et incompréhensions pour éviter qu'elles s'accumulent
 
 --
 
@@ -42,7 +42,7 @@ xaringanExtra::use_panelset()
 - *Consulter* : https://grisoudre.github.io/quantilille21_intror/Support.html et https://grisoudre.github.io/quantilille21_intror/Support_lineaire.html
 - *Télécharger* : https://github.com/Grisoudre/quantilille21_intror
 
-Le support vous aide à suivre la formation, vous pouvez directement copier/coller les codes proposés. Il peut être téléchargé sur https://github.com/Grisoudre/quantilille21_intror (télécharger l'ensemble des fichiers). Le fichier .html contient l'ensemble de la présentation et s'ouvre via un nagivateur web (firefox, chrome, opera, etc).
+Le support vous aide à suivre la formation, vous pouvez directement copier/coller les codes proposés. Il peut être téléchargé sur https://github.com/Grisoudre/quantilille21_intror (télécharger l'ensemble des fichiers : Code > Download zip). Le fichier .html contient l'ensemble de la présentation et s'ouvre via un nagivateur web (firefox, chrome, opera, etc).
 
 
 
@@ -79,7 +79,7 @@ Le support vous aide à suivre la formation, vous pouvez directement copier/coll
 ---
 ## Données utilisées
 
-Nous allons travailler sur des données portant sur les accidents de la route 2019 décrits par les forces de police : 
+Nous allons travailler sur des données portant sur les accidents de la route 2019 décrits par les forces de l'ordre (police, gendarmerie) : 
 https://www.data.gouv.fr/fr/datasets/base-de-donnees-accidents-corporels-de-la-circulation/
 
 En général, voici le type de fichiers qu'on reçoit lorsqu'on contacte les producteurs d'une enquête :
@@ -153,7 +153,7 @@ R est un dérivé gratuit (licence GNU GPL) du langage de statistique S. C'est u
 ***... Quelques inconvénients :***
 
 + Les fonctionnalités (et bibliothèques) sont très souvent mises à jour et nécessitent d'être maintenues.
-+ Les fonctionnalités sont créées par les contributeurs et les syntaxes peuvent varier
++ Les fonctionnalités sont créées par les contributeurs et les syntaxes peuvent varier => une même action peut se faire de différentes manières
 
 
 ---
@@ -219,7 +219,7 @@ remotes::install_github("NomUtilisateur/NomPackage")
 concrètement, on fait appelle au packages {remotes} en écrivant le nom du package puis **::** pour désigner qu'on utilise une fonction de ce package -> intérêt : évite de charger toutes les fonctions quand on en utilisera qu'une une seule fois.
 
 
-*Cette étape d'installation des packages est délicate : R évoluant rapidement, la compatibilité entre les packages et entre les packages et la version utilisée de R n'est pas toujours garantie.*
+*Cette étape d'installation des packages est délicate : R évoluant rapidement, la compatibilité entre les packages et entre les packages et la version utilisée de R n'est pas toujours garantie ; Vous en avez peut-être fait l'expérience*
 
 ---
 ## Les packages
@@ -250,7 +250,7 @@ knitr::include_graphics("img/install_vs_library.jpeg")
 
 Une des limites du langage R est aussi une de ses qualités : la possibilité de créer et de diffuser des fonctions et des packages facilement implique que, selon les packages utilisés, la syntaxe peut varier.
 
-Le package {tidyverse} regroupe d'autres packages complémentaires qui ont été pensés selon une syntaxe commune et qui commence à être largement partagée. C'est pourquoi, pour cette demi-journée, je vous présenterai essentiellement des fonctionnalités {tidyverse} au détriment du code en R {base}. Nous nous y intéressons particulièrement pour ses fonctionnalités de mise en forme des données. Les principaux "sous-packages" de {tidyverse} sont :
+Le package {tidyverse} regroupe d'autres packages complémentaires qui ont été pensés selon une **syntaxe commune** et qui commence à être largement partagée. C'est pourquoi, pour cette demi-journée, je vous présenterai essentiellement des fonctionnalités {tidyverse} au détriment du code en R {base}. Nous nous y intéressons particulièrement pour ses fonctionnalités de mise en forme des données. Les principaux "sous-packages" de {tidyverse} sont :
 
 - `readr` : importation
 - `tibble` : format des tableaux de données
@@ -259,11 +259,12 @@ Le package {tidyverse} regroupe d'autres packages complémentaires qui ont été
 - `tidyr` et `dplyr` : mise en forme de tableaux
 - `ggplot2` : graphiques
 
+= Les packages chargés quand on éxécute `library(tidyverse)`
 ---
 
 ## Environnement de RStudio
 
-On ouvre RStudio pour découvrir l'interface, puis on créera un projet associé aux dossiers et sous-dossiers qu'on vient de faire.
+On ouvre RStudio pour découvrir l'interface. On créera ensuite un projet associé aux dossiers et sous-dossiers qu'on vient de faire.
 
 
 ```{r, out.width = "650px", echo=F}
@@ -374,7 +375,7 @@ En haut à droite, une icône en forme de cube bleu permet de créer un **"nouve
 
 ou bien **File > New Project > Existing directory** –> Browse > Sélectionnez votre dossier créé pour la formation > Create project
 
-Un fichier **Nom_du_dossier.Rproj** apparaît dans le dossier, c'est le raccourci qui mènera à la session R. Un fichier **.RData** sera également créé et contiendra les objets présents dans l'environnement au moment de la fermeture de la session.
+Un fichier **Nom_du_dossier.Rproj** apparaît dans le dossier, c'est le raccourci qui mènera à la session R. Un fichier **.RData** sera également créé et contiendra les objets présents dans l'environnement au moment de la fermeture de la session (si vous l'enregistrez).
 
 ---
 ## Commentaires
@@ -455,14 +456,16 @@ Plusieurs **packages** facilitent l'importation directe de tableaux de données 
 
 ---
 
-## Importer des fichiers textes (cvs, txt)
+## Importer des fichiers textes (csv, txt)
 
 Les fichiers sont enregistrés en CSV dans le sous-dossier "data" : On indique le chemin "data/nom_fichier.csv" :
 
 ```{r import csv}
 caracteristiques <-read.csv2("data/caracteristiques-2019.csv", 
-                             fileEncoding = "UTF-8")
+                             fileEncoding = "UTF-8",
+                             stringsAsFactors = F)
 # argument nécessaire : "SousDossiers/NomFichier.csv"
+# argument fortement conseillé : stringsAsFactors = F
 # arguments qui peuvent être utiles :
 # - fileEncoding = format d'encodage des caractères
 # arguments par défaut :
@@ -477,9 +480,21 @@ caracteristiques <-read.csv2("data/caracteristiques-2019.csv",
 - `read.csv2` quand le séparateur est un `;`
 - `read.table` pour les fichiers .txt et séparateur = `\t`
 
+---
+
+## Importer des fichiers textes (csv, txt)
+
+L'option `stringsAsFactors = F` est **importante** car (au moins jusqu'à la version 4 de R), la fonction d'import `read.csv2` transforme par défaut les chaînes de caractères en "factors". 
+
+Les "factors" dans R sont des colonnes d'un tableau pour lesquelles les modalités sont enregistrées sous forme de chiffres (un peu comme dans un dictionnaire des codes). La colonne genre contiendra plusieurs libellés "homme", "femme" enregistrés sous les codes 1 et 2.
+
+Les factors sont **utiles** car ils prennent **moins de place** et surtout leurs modalités sont **ordonnés** (présentation des modalités dans un graphique ou un tableau de résultats, modalité de référence pour des régressions)
+
+Mais leur utilisation est **délicate**, peut mener à des erreurs et demande un peu de pratique. Par exemple, on ne peut pas directement modifier les chaînes de caractère d'un facteurs (par exemple modifier la casse des modalités) ; il faut transformer leur type.
 
 ---
-## Importater les 4 tables BAAC
+## Importer les 4 tables BAAC
+
  -> Sur ce modèle, importez les 3 autres tables BAAC : lieux, usagers et véhicules.
 
 --
@@ -785,7 +800,7 @@ Jusqu'ici, on dépend des choix de codage effectués par les producteurs des tab
 
   - modifier les codes par les libellés présentés dans le dictionnaire des codes, 
   - calculer l'âge au lieu d'utiliser l'année de naissance, 
-  - ré-typifier une colonne qui aurait été mésinterpréter pour effectuer des calculs, 
+  - ré-typifier une colonne qui aurait été mésinterprétée pour effectuer des calculs, 
   - compter le nombre de personnes impliquées pour chaque accident, 
   - relier les lignes des usagers à leurs accidents respectifs, etc.
 
@@ -811,6 +826,8 @@ class(usagers$sexe)
 - Modifier en variable binaire (logical) : `as.logical()`
 
 - Modifier en date : `as.Date()`
+
+- Modifier en chaîne de caractère (character) : `as.character()`
 
 ---
 
@@ -859,6 +876,9 @@ usagers$trajet <- fct_collapse(factor(usagers$trajet),
 # fct_collapse permet de recoder 2 valeurs en une unique
 levels(usagers$trajet)
 ```
+
+
+**=> Recodez les variables `lum`, `agg` et `atm` de la table "caractéristiques"**
 
 
 ---
@@ -945,7 +965,8 @@ usagers$age_classe <- cut(usagers$age, seq(0,110,10),
 
 Créer une variable qui distingue les accidents ayant eu lieu dans les Hauts-de-France :
 ```{r}
-caracteristiques$HdF <- ifelse (caracteristiques$dep %in% c("59","62","80","60","2"), # condition
+caracteristiques$HdF <- ifelse (caracteristiques$dep %in% c("59","62","80","60","2"),
+                                # condition
                       "Hauts de France", # Valeur si condition remplie
                       "Hors Hauts de France") # Valeur si non
 freq(caracteristiques$HdF)
@@ -964,7 +985,7 @@ head(caracteristiques$hrmn)
 ```
 
 --
-**Proposition : une fois supprimé les ":", on transforme la colonne en type numérique**
+**Proposition : une fois supprimés les ":", on transforme la colonne en type numérique**
 
 
 ```{r, eval = T}
@@ -1003,7 +1024,7 @@ caracteristiques$hrmnCl <- case_when(caracteristiques$hrmn < 600 ~ "00h-05h59",
 ---
 ## Exercice : Recodez la catégorie de véhicule de la table Véhicules
 
-Les modalités pourront être : non-motorisé, 2-roues motorisées, voiture, poids lourd et trains
+Les modalités pourront être : non-motorisé, 2-roues motorisées, voiture, poids lourd/trains
 
 --
 
@@ -1020,7 +1041,7 @@ freq(vehicules$catv_rec, sort="dec",valid=F, total=T)
 ---
 ## Sélections, filtres et tris
 
-Suivant ce qu'on recherche, on peut souhaiter à ne conserver que certaines colonnes ou lignes d'un tableau (lorsqu'on s'intéresse à une sous-population par exemple).
+Suivant ce qu'on recherche, on peut souhaiter ne conserver que certaines colonnes ou lignes d'un tableau (lorsqu'on s'intéresse à une sous-population par exemple).
 
 
 ### Sélection de colonnes `select`
@@ -1030,13 +1051,18 @@ Suivant ce qu'on recherche, on peut souhaiter à ne conserver que certaines colo
 Date <- select(caracteristiques, Num_Acc, mois, jour, hrmn)
 ```
 
-avec `caracteristiques` (tableau de données) en 1er argument puis les colonnes qu'on souhaite conserver séparées par une ",".
+avec `caracteristiques` (tableau de données) en 1er argument puis les colonnes qu'on souhaite conserver séparées par une ",". C'est une syntaxe caractéristique de {tydiverse}.
 
 ---
 ### Sélection de lignes par position : `slice`
-```{r}
+```{r, eval=F}
 # 4 premières lignes :
 slice(usagers,1:4) 
+```
+
+
+```{r, echo=F}
+slice(usagers %>% select(-id_vehicule),1:4) 
 ```
 
 ---
@@ -1186,6 +1212,9 @@ Les principales fonctions permettant de réarranger les tables via tydiverse son
 
 Il peut être intéressant de regrouper plusieurs observations selon un ou plusieurs critères afin de produire des calculs. La fonction `group_by` produit ces regroupements et est nécessairement associée à une fonction de calcul dans `summarise`.
 
+
+--
+
 ### Exemple 1 : Compter le nombre d'usagers moyen par accident
 
 ```{r}
@@ -1197,9 +1226,9 @@ mean(NbUsagers$NbUsagers)
 ```
 ---
 
-## Mise en pratique
+## Mise en pratique : Exemple 2
 
--> Exemple 2 : De la même façon, quel est le nombre maximum de véhicules impliqués ?
+-> De la même façon, quel est le nombre maximum de véhicules impliqués dans un même accident ?
 
 --
 

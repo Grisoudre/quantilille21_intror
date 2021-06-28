@@ -37,7 +37,7 @@ xaringanExtra::use_panelset()
 
 
 
--> Exprimez vos difficultés et incompréhensions pour éviter quelles s'accumulent
+-> Exprimez vos difficultés et incompréhensions pour éviter qu'elles s'accumulent
 
 
 
@@ -49,8 +49,7 @@ xaringanExtra::use_panelset()
 - *Consulter* : https://grisoudre.github.io/quantilille21_intror/Support.html et https://grisoudre.github.io/quantilille21_intror/Support_lineaire.html
 - *Télécharger* : https://github.com/Grisoudre/quantilille21_intror
 
-Le support vous aide à suivre la formation, vous pouvez directement copier/coller les codes proposés. Il peut être téléchargé sur https://github.com/Grisoudre/quantilille21_intror (télécharger l'ensemble des fichiers). Le fichier .html contient l'ensemble de la présentation et s'ouvre via un nagivateur web (firefox, chrome, opera, etc).
-
+Le support vous aide à suivre la formation, vous pouvez directement copier/coller les codes proposés. Il peut être téléchargé sur https://github.com/Grisoudre/quantilille21_intror (télécharger l'ensemble des fichiers : Code > Download zip). Le fichier .html contient l'ensemble de la présentation et s'ouvre via un nagivateur web (firefox, chrome, opera, etc).
 
 
 
@@ -85,7 +84,7 @@ Le support vous aide à suivre la formation, vous pouvez directement copier/coll
 
 ## Données utilisées
 
-Nous allons travailler sur des données portant sur les accidents de la route 2019 décrits par les forces de police : 
+Nous allons travailler sur des données portant sur les accidents de la route 2019 décrits par les forces de l'ordre (police, gendarmerie) : 
 https://www.data.gouv.fr/fr/datasets/base-de-donnees-accidents-corporels-de-la-circulation/
 
 En général, voici le type de fichiers qu'on reçoit lorsqu'on contacte les producteurs d'une enquête :
@@ -373,7 +372,7 @@ En haut à droite, une icône en forme de cube bleu permet de créer un **"nouve
 
 ou bien **File > New Project > Existing directory** –> Browse > Sélectionnez votre dossier créé pour la formation > Create project
 
-Un fichier **Nom_du_dossier.Rproj** apparaît dans le dossier, c'est le raccourci qui mènera à la session R. Un fichier **.RData** sera également créé et contiendra les objets présents dans l'environnement au moment de la fermeture de la session.
+Un fichier **Nom_du_dossier.Rproj** apparaît dans le dossier, c'est le raccourci qui mènera à la session R. Un fichier **.RData** sera également créé et contiendra les objets présents dans l'environnement au moment de la fermeture de la session (si vous l'enregistrez).
 
 
 ## Commentaires
@@ -448,13 +447,14 @@ Plusieurs **packages** facilitent l'importation directe de tableaux de données 
 
 
 
-## Importer des fichiers textes (cvs, txt)
+## Importer des fichiers textes (csv, txt)
 
 Les fichiers sont enregistrés en CSV dans le sous-dossier "data" : On indique le chemin "data/nom_fichier.csv" :
 
 ```{r import csv}
 caracteristiques <-read.csv2("data/caracteristiques-2019.csv", 
-                             fileEncoding = "UTF-8")
+                             fileEncoding = "UTF-8",
+                             stringsAsFactors = F)
 # argument nécessaire : "SousDossiers/NomFichier.csv"
 # arguments qui peuvent être utiles :
 # - fileEncoding = format d'encodage des caractères
@@ -472,6 +472,16 @@ caracteristiques <-read.csv2("data/caracteristiques-2019.csv",
 
 
 
+L'option `stringsAsFactors = F` est **importante** car (au moins jusqu'à la version 4 de R), la fonction d'import `read.csv2` transforme par défaut les chaînes de caractères en "factors". 
+
+Les "factors" dans R sont des colonnes d'un tableau pour lesquelles les modalités sont enregistrées sous forme de chiffres (un peu comme dans un dictionnaire des codes). La colonne genre contiendra plusieurs libellés "homme", "femme" enregistrés sous les codes 1 et 2.
+
+Les factors sont **utiles** car ils prennent **moins de place** et surtout leurs modalités sont **ordonnés** (présentation des modalités dans un graphique ou un tableau de résultats, modalité de référence pour des régressions)
+
+Mais leur utilisation est **délicate**, peut mener à des erreurs et demande un peu de pratique. Par exemple, on ne peut pas directement modifier les chaînes de caractère d'un facteurs (par exemple modifier la casse des modalités) ; il faut transformer leur type.
+
+
+
 ## Importer les 4 tables BAAC
  -> Sur ce modèle, importez les 3 autres tables BAAC : lieux, usagers et véhicules.
 
@@ -479,11 +489,14 @@ caracteristiques <-read.csv2("data/caracteristiques-2019.csv",
 
 ```{r import Deputes et Elections}
 lieux <-read.csv2("data/lieux-2019.csv", 
-                      fileEncoding = "UTF-8")
+                      fileEncoding = "UTF-8",
+                             stringsAsFactors = F)
 vehicules <-read.csv2("data/vehicules-2019.csv", 
-                      fileEncoding = "UTF-8")
+                      fileEncoding = "UTF-8",
+                             stringsAsFactors = F)
 usagers <-read.csv2("data/usagers-2019.csv", 
-                    fileEncoding = "UTF-8")
+                    fileEncoding = "UTF-8",
+                             stringsAsFactors = F)
 ```
 
 
@@ -598,9 +611,13 @@ Un package utile facilitant les importations et exportations (entre la session R
 ## Premier aperçu d'une table
 
   
-```{r}
+```{r, eval=F}
 head(usagers, 10)
 # Aperçu des 10 1ères lignes (6 par défaut)
+```
+
+```{r, echo=F}
+head(usagers %>% select(-id_vehicule), 10)
 ```
 
 
@@ -682,6 +699,8 @@ write.csv2(resultat, "output/tap_sexe.csv")
 
 -> Quelle est la répartition des catégories d'usagers parmi les personnes impliquées dans les accidents ?
 
+--
+
 
 ```{r}
 freq(usagers$catu, valid=F, sort="dec", total=T)
@@ -756,7 +775,7 @@ Jusqu'ici, on dépend des choix de codage effectués par les producteurs des tab
 
   - modifier les codes par les libellés présentés dans le dictionnaire des codes, 
   - calculer l'âge au lieu d'utiliser l'année de naissance, 
-  - ré-typifier une colonne qui aurait été mésinterpréter pour effectuer des calculs, 
+  - ré-typifier une colonne qui aurait été mésinterprétée pour effectuer des calculs, 
   - compter le nombre de personnes impliquées pour chaque accident, 
   - relier les lignes des usagers à leurs accidents respectifs, etc.
 
@@ -783,6 +802,7 @@ class(usagers$sexe)
 
 - Modifier en date : `as.Date()`
 
+- Modifier en chaîne de caractère (character) : `as.character()`
 
 
 Puis recodage à l'aide du dictionnaire des codes fourni dans la documentation et de la fonction `fct_collapse` :
@@ -832,6 +852,7 @@ levels(usagers$trajet)
 ```
 
 
+**=> Recodez les variables `lum`, `agg` et `atm` de la table "caractéristiques"**
 
 #### Recodages de la table Caractéristiques
 
@@ -934,7 +955,7 @@ head(caracteristiques$hrmn)
 ```
 
 
-**Proposition : une fois supprimé les ":", on transforme la colonne en type numérique**
+**Proposition : une fois supprimés les ":", on transforme la colonne en type numérique**
 
 
 ```{r, eval = T}
@@ -973,7 +994,7 @@ caracteristiques$hrmnCl <- case_when(caracteristiques$hrmn < 600 ~ "00h-05h59",
 
 ### Exercice : Recodez la catégorie de véhicule de la table Véhicules
 
-Les modalités pourront être : non-motorisé, 2-roues motorisées, voiture, poids lourd et trains
+Les modalités pourront être : non-motorisé, 2-roues motorisées, voiture, poids lourd/trains
 
 
 
@@ -990,7 +1011,7 @@ freq(vehicules$catv_rec, sort="dec",valid=F, total=T)
 
 ## Sélections, filtres et tris
 
-Suivant ce qu'on recherche, on peut souhaiter à ne conserver que certaines colonnes ou lignes d'un tableau (lorsqu'on s'intéresse à une sous-population par exemple).
+Suivant ce qu'on recherche, on peut souhaiter ne conserver que certaines colonnes ou lignes d'un tableau (lorsqu'on s'intéresse à une sous-population par exemple).
 
 
 ### Sélection de colonnes `select`
@@ -1000,7 +1021,7 @@ Suivant ce qu'on recherche, on peut souhaiter à ne conserver que certaines colo
 Date <- select(caracteristiques, Num_Acc, mois, jour, hrmn)
 ```
 
-avec `caracteristiques` (tableau de données) en 1er argument puis les colonnes qu'on souhaite conserver séparées par une ",".
+avec `caracteristiques` (tableau de données) en 1er argument puis les colonnes qu'on souhaite conserver séparées par une ",". C'est une syntaxe caractéristique de {tydiverse}.
 
 
 ### Sélection de lignes par position : `slice`
@@ -1156,10 +1177,9 @@ mean(NbUsagers$NbUsagers)
 ```
 
 
-### Mise en pratique
+## Mise en pratique : Exemple 2
 
--> Exemple 2 : De la même façon, quel est le nombre maximum de véhicules impliqués ?
-
+-> De la même façon, quel est le nombre maximum de véhicules impliqués dans un même accident ?
 
 
 ```{r}
@@ -1194,6 +1214,8 @@ usagers %>%
 Les données sur les accidents sont organisées en plusieurs tables relatives à plusieurs unités statistiques (l'événement "accident" des tables caractéristiques et lieux, les véhicules impliqués et les usagers impliqués). 
 
 On remarque d'ailleurs que le nombre d'observations pour les tables de chaque type d'unité varie. Il est toutefois possible de les regrouper si on dispose d'une clé d'appariemment ou variable de jointure (une variable commune à deux tables permettant d'associer les accidents avec les personnes et les véhicules concernés).
+
+--
 
 ### Exemple 1 : Jointure des tables "Caractéristiques" et "lieux" :
 
